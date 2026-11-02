@@ -101,14 +101,68 @@ export const addonWeaveRules = [
     ],
   },
 
-  // Primary sidebar: a workspace header (product mark, product name, signed-in user) on top.
+  // Primary sidebar shell (AI-1329): light, fixed 240px, team header with the notification bell,
+  // then Search and Tickets; no taskbar tabs, overview list, quick search or drag-resize.
   {
     target: 'apps/desktop/components/layout/LayoutPage.vue',
-    scriptSetup: `import AmberWorkspaceHeader from '${ADDON}/AmberWorkspaceHeader.vue'`,
+    scriptSetup: [
+      `import AmberWorkspaceHeader from '${ADDON}/AmberWorkspaceHeader.vue'`,
+      `import AmberSidebarNav from '${ADDON}/AmberSidebarNav.vue'`,
+      `import { useAmberSearchShortcut } from '${ADDON}/useAmberSearchShortcut.ts'`,
+      "import { SIDEBAR_COLLAPSED_WIDTH as __AMBER_COLLAPSED_WIDTH } from '#desktop/composables/useResizeGridColumns.ts'",
+      'useAmberSearchShortcut()',
+      'const { isSidebarCollapsed: __amberPrimaryCollapsed } = useSidebarDisplay(SidebarName.Primary)',
+      'const __amberGridColumns = computed(() => `${__amberPrimaryCollapsed.value ? __AMBER_COLLAPSED_WIDTH : 240}px minmax(0, 1fr)`)',
+    ].join('\n'),
     template: [
       {
+        match: { root: true },
+        setAttribute: { name: ':style', value: "{ '--grid-columns': __amberGridColumns }" },
+      },
+      { match: { component: 'LayoutSidebar' }, removeAttribute: 'resizable' },
+      { match: { attr: { name: 'data-theme', value: 'dark' } }, removeAttribute: 'data-theme' },
+      {
         match: { component: 'LeftSidebarHeader' },
-        insertBefore: '<AmberWorkspaceHeader v-if="!isCollapsed" class="px-3 pt-3" />',
+        replace: '<AmberWorkspaceHeader class="mb-3 px-3 pt-3" :collapsed="isCollapsed" />',
+      },
+      { match: { component: 'QuickSearch' }, remove: true },
+      {
+        match: { component: 'PageNavigation' },
+        replace: '<AmberSidebarNav class="px-3" :collapsed="isCollapsed" />',
+      },
+      { match: { component: 'UserTaskbarTabs' }, remove: true },
+    ],
+  },
+
+  // Light theme only (AI-1329 FR-7): a stored dark preference is overridden in memory.
+  {
+    target: 'apps/desktop/AppDesktop.vue',
+    scriptSetup: [
+      `import { useAmberForceLight } from '${ADDON}/useAmberForceLight.ts'`,
+      'useAmberForceLight()',
+    ].join('\n'),
+  },
+
+  // No theme switch in the avatar menu (AI-1329 FR-7).
+  {
+    target: 'apps/desktop/components/layout/LayoutSidebar/LeftSidebar/AvatarMenu/AvatarMenu.vue',
+    scriptSetup: `import { withoutAppearanceItem } from '${ADDON}/amberThemeSwitches.ts'`,
+    template: [
+      {
+        match: { component: 'CommonPopoverMenu' },
+        setAttribute: { name: ':items', value: 'withoutAppearanceItem(avatarMenuItems)' },
+      },
+    ],
+  },
+
+  // No Appearance page in the Personal settings menu (AI-1329 FR-7).
+  {
+    target: 'apps/desktop/pages/personal-setting/components/PersonalSettingSidebar.vue',
+    scriptSetup: `import { withoutAppearancePage } from '${ADDON}/amberThemeSwitches.ts'`,
+    template: [
+      {
+        match: { component: 'NavigationMenu' },
+        setAttribute: { name: ':entries', value: 'withoutAppearancePage(personalSettingItems)' },
       },
     ],
   },

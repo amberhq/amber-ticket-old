@@ -26,12 +26,73 @@
   --radius-xl: 0.625rem; /* 10px popovers */
   --radius-2xl: 0.75rem; /* 12px cards, dialogs */
   --radius-3xl: 0.75rem;
+  --amber-text-badge: 0.6875rem; /* 11px badges */
+  --amber-text-meta: 0.75rem; /* 12px meta */
   --amber-shadow-control: 0 1px 2px rgba(0, 0, 0, 0.08);
   --amber-shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.1);
   --amber-shadow-dialog: 0 20px 50px rgba(0, 0, 0, 0.2);
+  --amber-backdrop: rgba(15, 15, 15, 0.28);
+  --amber-scrollbar: rgba(0, 0, 0, 0.18);
+  --amber-surface-glass: rgba(255, 255, 255, 0.8); /* Zammad's sticky compact ticket header */
 }
 
 /* stylelint-enable custom-property-pattern */
+
+/*
+  The Amber palette (AI-1329 FR-1 to FR-3). This block is the single source of truth: the colour
+  check (addons/amber/scripts/colour-check.mjs) allows exactly the colours written in this file,
+  so a colour used anywhere in the skin must be declared here first.
+*/
+:root {
+  /* FR-1 neutrals: ink, surfaces, borders. */
+  --amber-ink: #171717;
+  --amber-surface: #fff;
+  --amber-surface-muted: #f3f3f3;
+  --amber-surface-sunken: #f8f8f8;
+  --amber-border: #ededed;
+  --amber-border-strong: #d4d4d4;
+
+  /* Neutral steps between them, used by the remaps below. */
+  --amber-neutral-25: #fafafa;
+  --amber-neutral-band: #f7f7f7;
+  --amber-neutral-150: #e6e6e6;
+  --amber-neutral-175: #e2e2e2;
+  --amber-neutral-350: #c7c7c7;
+  --amber-neutral-400: #a3a3a3;
+  --amber-placeholder: #8f8f8f;
+  --amber-text-subtle: #737373;
+  --amber-text-muted: #6b6b6b;
+  --amber-text-secondary: #525252;
+  --amber-text: #404040;
+  --amber-ink-strong: #262626;
+  --amber-ink-deep: #0a0a0a;
+  --amber-black: #000;
+
+  /* FR-2 semantic pairs (background / text). */
+  --amber-danger-bg: #fdecec;
+  --amber-danger-fg: #9f1d17;
+  --amber-danger-border: #f5b5b0;
+  --amber-danger-strong: #b42318;
+  --amber-warning-bg: #fcf3dc;
+  --amber-warning-fg: #7a5300;
+  --amber-success-bg: #e6f4ec;
+  --amber-success-fg: #1e6b45;
+  --amber-purple-bg: #efebff;
+  --amber-purple-fg: #4c2db3;
+  --amber-blue-bg: #eef2fd;
+  --amber-blue-fg: #1e3a8a;
+
+  /* Internal notes: the warm comment frame. */
+  --amber-note-bg: #fbf7ea;
+  --amber-note-border: #f1e6c2;
+
+  /* FR-3 one dot colour per ticket state type (O-013: designer to confirm). */
+  --amber-dot-new: #2563eb;
+  --amber-dot-open: #dc2626;
+  --amber-dot-pending: #8b5cf6;
+  --amber-dot-closed: #16a34a;
+  --amber-dot-other: #a3a3a3;
+}
 
 /* Light theme: monochrome neutrals, black as the action colour. */
 :root:not([data-theme='dark']) {
@@ -74,23 +135,13 @@
   --color-green-100: #f3f3f3;
   --color-green-200: #ededed;
 
-  /* Status pairs. */
+  /* Page background behind public pages (login): Zammad's near-black -> muted surface. */
+  --color-neutral-950: #f3f3f3;
+
+  /* Status pairs. Pink is Zammad's alert colour (unseen-notification count, errors). */
   --color-pink-100: #fdecec;
+  --color-pink-500: #b42318;
   --color-red-500: #b42318;
   --color-yellow-50: #fcf3dc;
   --color-green-250: #e6f4ec;
-}
-
-/* Dark theme: keep Zammad's structure, neutral greys instead of blue-greys. */
-:root[data-theme='dark'] {
-  --color-gray-100: #6b6b6b;
-  --color-gray-200: #4a4a4a;
-  --color-gray-300: #3d3d3d;
-  --color-gray-400: #383838;
-  --color-gray-500: #262626;
-  --color-gray-600: #2a2a2a;
-  --color-gray-700: #212121;
-  --color-gray-800: #1c1c1c;
-  --color-gray-900: #2e2e2e;
-  --color-neutral-950: #141414;
 }

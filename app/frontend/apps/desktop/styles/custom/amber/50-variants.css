@@ -8,19 +8,36 @@
   after a Zammad upgrade.
 */
 
+/*
+  Control sizes (AI-1329 FR-4, FR-5). Zammad sizes buttons with `text-xs/sm/base` utilities; every
+  labelled button becomes 14px, secondary buttons 28px tall, primary (`bg-blue-800`) and submit
+  (`bg-yellow-300`) buttons 32px. Icon-only buttons (no label span) keep their size.
+*/
+[data-zammad-target='CommonButton']:has(> span):is(.text-xs, .text-sm, .text-base) {
+  min-height: 1.75rem;
+  padding-block: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  &:is(.bg-blue-800, .bg-yellow-300) {
+    min-height: 2rem;
+    padding-block: 0.375rem;
+  }
+}
+
 /* Submit button: Zammad yellow -> Amber ink primary. */
 :root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-yellow-300 {
-  background-color: #171717;
-  color: #fff;
+  background-color: var(--amber-ink);
+  color: var(--amber-surface);
 
   &:hover {
-    background-color: #000;
+    background-color: var(--amber-black);
   }
 }
 
 /* Primary button hover (blue-850 is already black via tokens; add depth). */
 :root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-blue-800:hover {
-  background-color: #000;
+  background-color: var(--amber-black);
 }
 
 /*
@@ -28,27 +45,26 @@
   image viewer, which reads the same `--color-alpha-900` token, keeps its dark stage.
 */
 :root:not([data-theme='dark']) .bg-alpha-900 {
-  background-color: rgba(15, 15, 15, 0.28);
+  background-color: var(--amber-backdrop);
 }
 
 /* Secondary (text) buttons: ghost fill on hover instead of an outline. */
 :root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-transparent:hover {
-  background-color: #f3f3f3;
+  background-color: var(--amber-surface-muted);
 }
 
 /*
   Labelled secondary buttons (`bg-transparent text-blue-800` + a text label) become the
-  reference's grey filled toolbar buttons; icon-only buttons stay bare.
+  design's grey filled toolbar buttons; icon-only buttons stay bare.
 */
 :root:not([data-theme='dark'])
   [data-zammad-target='CommonButton'].bg-transparent.text-blue-800:has(> span) {
-  min-height: 2rem;
   padding-inline: 0.75rem;
   border-radius: var(--radius-lg);
-  background-color: #f3f3f3;
-  color: #171717;
+  background-color: var(--amber-surface-muted);
+  color: var(--amber-ink);
 
   &:hover {
-    background-color: #ededed;
+    background-color: var(--amber-border);
   }
 }

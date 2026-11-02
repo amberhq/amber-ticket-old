@@ -20595,6 +20595,30 @@
               "deprecationReason": null
             },
             {
+              "name": "amberCurrentUserGroups",
+              "description": "Active groups the current agent can read, ordered by name (Amber sidebar team header)",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Group",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "applicationBuildChecksum",
               "description": "Checksum of the currently built front-end application. If this changes, the front-end(s) should reload.",
               "args": [],

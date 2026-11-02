@@ -397,6 +397,10 @@ msgstr ""
 msgid "%s tickets found"
 msgstr ""
 
+#: app/frontend/apps/desktop/addons/amber/AmberSidebarNav.vue:54
+msgid "%s to assign"
+msgstr ""
+
 #: app/assets/javascripts/app/models/ticket_article.coffee:51
 #: app/frontend/shared/composables/activity-message/activityMessageBuilder/builders/ticket-article.ts:28
 msgid "%s updated article for |%s|"
@@ -10727,6 +10731,10 @@ msgstr ""
 
 #: app/assets/javascripts/app/controllers/_channel/microsoft_graph.coffee:177
 msgid "Mailbox type"
+msgstr ""
+
+#: app/frontend/apps/desktop/addons/amber/AmberSidebarNav.vue:28
+msgid "Main navigation"
 msgstr ""
 
 #: app/frontend/apps/desktop/components/layout/LayoutPage.vue:114

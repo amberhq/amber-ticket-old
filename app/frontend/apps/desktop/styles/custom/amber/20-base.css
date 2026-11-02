@@ -10,9 +10,25 @@
   letter-spacing: -0.003em;
 }
 
+/* Body text is 13px (AI-1329 FR-4); buttons and inputs use Tailwind's text-base (14px). */
+:root body {
+  font-size: var(--text-sm);
+  line-height: 1.25rem;
+}
+
 :root:not([data-theme='dark']) body {
-  background-color: #fff;
-  color: #171717;
+  background-color: var(--amber-surface);
+  color: var(--amber-ink);
+}
+
+/* Headings: 16–20px (FR-4). */
+:root h1 {
+  font-size: var(--text-xl);
+}
+
+:root h2,
+:root h3 {
+  font-size: var(--text-lg);
 }
 
 /* Counts, IDs and times line up. */
@@ -25,21 +41,17 @@ td,
 /* Placeholders stay lighter than helper text (which is AA), so they never read as values. */
 :root:not([data-theme='dark']) input::placeholder,
 :root:not([data-theme='dark']) textarea::placeholder {
-  color: #8f8f8f;
+  color: var(--amber-placeholder);
 }
 
 :root:not([data-theme='dark']) ::selection {
-  background-color: #e6e6e6;
+  background-color: var(--amber-neutral-150);
 }
 
 /* Thin, quiet scrollbars. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
-}
-
-:root[data-theme='dark'] * {
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-color: var(--amber-scrollbar) transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

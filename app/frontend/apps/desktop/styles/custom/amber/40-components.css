@@ -22,11 +22,6 @@
   border-bottom: 1px solid #ededed;
 }
 
-:root[data-theme='dark'] [data-zammad-target='TableHeader'] th {
-  color: #a3a3a3;
-  border-bottom-color: #2e2e2e;
-}
-
 /* Column resize handles only show when the header is pointed at. */
 [data-zammad-target='HeaderResizeLine'] {
   opacity: 0;
@@ -130,7 +125,9 @@
 
 /* ------------------------------------------------------- Badges and labels */
 
+/* Badges are 11px (AI-1329 FR-4). */
 [data-zammad-target='CommonBadge'] {
+  font-size: var(--amber-text-badge);
   font-weight: 600;
   letter-spacing: 0;
 }

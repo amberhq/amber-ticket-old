@@ -1,11 +1,16 @@
 // Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/
 
-import { readFileSync } from 'node:fs'
+import '#tests/graphql/builders/mocks.ts'
+
+import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { renderComponent } from '#tests/support/components/index.ts'
 
+import { GraphQLErrorTypes } from '#shared/types/error.ts'
+
 import AmberWorkspaceHeader from '../AmberWorkspaceHeader.vue'
+import { mockAmberCurrentUserGroupsQueryError } from '../graphql/queries/amberCurrentUserGroups.mocks.ts'
 import { buildAllowList } from '../scripts/colourAllowList.mjs'
 import { isAmberSearchShortcut } from '../useAmberSearchShortcut.ts'
 import { pickAmberTeam } from '../useAmberTeam.ts'
@@ -28,6 +33,22 @@ describe('AI-1329 Amber shell', () => {
     ;['#fdecec', '#9f1d17'].forEach((colour) => expect(allowed).toContain(colour))
     expect(allowed).toContain('#2563eb')
     expect(allowed).not.toContain('#23a2cd')
+  })
+
+  it('TC-3: every colour the skin uses is declared in 10-tokens.css', () => {
+    const dir = resolve(__dirname, '../../../styles/custom/amber')
+    const allowed = buildAllowList(readFileSync(resolve(dir, '10-tokens.css'), 'utf8'))
+    const undeclared: string[] = []
+
+    readdirSync(dir)
+      .filter((file) => file.endsWith('.css'))
+      .forEach((file) => {
+        buildAllowList(readFileSync(resolve(dir, file), 'utf8')).forEach((colour) => {
+          if (!allowed.has(colour)) undeclared.push(`${colour} (${file})`)
+        })
+      })
+
+    expect(undeclared).toEqual([])
   })
 
   it('TC-18: the team is the first group by name, with its initials', () => {
@@ -69,9 +90,12 @@ describe('AI-1329 Amber shell', () => {
     })
   })
 
-  it('TC-26: the team header falls back to "Amber Helpdesk" with no team', () => {
+  it('TC-26: the team header falls back to "Amber Helpdesk" when the groups query fails', async () => {
+    mockAmberCurrentUserGroupsQueryError('Failed', { type: GraphQLErrorTypes.UnknownError })
+
     const view = renderComponent(AmberWorkspaceHeader, { store: true })
 
-    expect(view.getByText('Amber Helpdesk')).toBeInTheDocument()
+    expect(await view.findByText('Amber Helpdesk')).toBeInTheDocument()
+    expect(view.queryByRole('alert')).not.toBeInTheDocument()
   })
 })

@@ -3827,6 +3827,8 @@ export type Queries = {
   __typename?: 'Queries';
   /** Get a list of available AI text tools */
   aiAssistanceTextToolsList: Array<AiTextTool>;
+  /** Active groups the current agent can read, ordered by name (Amber sidebar team header) */
+  amberCurrentUserGroups: Array<Group>;
   /** Checksum of the currently built front-end application. If this changes, the front-end(s) should reload. */
   applicationBuildChecksum: Scalars['String']['output'];
   /** Configuration required for front end operation (more results returned for authenticated users) */
