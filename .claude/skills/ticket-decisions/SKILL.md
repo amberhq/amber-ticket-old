@@ -58,7 +58,8 @@ git fetch origin main
 git worktree add --no-track -b docs/AI-1283-decision-log-<yyyy-mm-dd> .claude/worktrees/AI-1283-log origin/main
 ```
 
-If the log has a branch with an open PR, add to that branch instead of opening a second PR.
+The log is pushed straight to `main` (step 7), so there is no long-lived log branch or PR to add to.
+The branch above is local and is deleted once its commit is on `main`.
 
 ### 2. Read the current log
 
@@ -70,7 +71,8 @@ the open items, and the **Sources last checked** line under the changelog.
 Collect everything decided or changed since the last check, from:
 
 - **This conversation:** what the user decided, chose, rejected, deferred or asked to change.
-- **amber-ticket:** commits on the Amber branches (`staging`, `service-standard-fix`, `feature/*`,
+- **amber-ticket:** commits on the Amber branches (`staging`, feature branches named
+  `<ticket>-<three words>` such as `AI-1329-apply-amber-theme` (I-017), older `feature/*`, and
   `docs/*`) since the last check (`git log --since=<date> --format='%h %ad %s' --date=short origin/<branch>`),
   and the planning docs in `amber-docs/ticketing-platform/`.
 - **sdlc-docs:** changed files under `POD-AI/` for AI-1283's child tickets (`AI-1284-…` and later).
@@ -110,15 +112,28 @@ In `_index.yml`, update `status` if it changed, and add any new repos or flags.
 In the root `README.md` index, update this folder's row if its status, repos, flags or keywords
 changed.
 
-### 7. Commit, and push only when asked
+### 7. Commit, then push straight to `main` when asked
 
 ```bash
 git add POD-AI/AI-1283-replace-ticketing README.md
 git commit -m "AI-1283: decision log - <short summary, e.g. add D-021, supersede D-012>"
 ```
 
-Show the user the commit. Push and open a PR against `main` only when they say so. Then remove the
-worktree (`git worktree remove .claude/worktrees/AI-1283-log`) once the branch is pushed.
+Show the user the commit. When they say yes, push it **directly to `main`**. Don't open a PR. Keep
+the history linear (no merge commits):
+
+```bash
+git fetch origin main
+git rebase origin/main
+git push origin HEAD:main
+```
+
+If the rebase conflicts in the root `README.md` index (other teams edit it often), keep `main`'s
+rows and re-apply only this folder's row changes. If the push is refused, say so; the commit stays
+on the local branch.
+
+Once the commit is on `main`, remove the worktree and its branch:
+`git worktree remove .claude/worktrees/AI-1283-log && git branch -D docs/AI-1283-decision-log-<yyyy-mm-dd>`.
 
 ## Entry formats
 
