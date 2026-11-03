@@ -355,3 +355,8 @@
     background-color: transparent;
   }
 }
+
+/* Inputs are 14px (AI-1329 FR-4). */
+[data-zammad-target='CommonInputSearch'] input {
+  font-size: 0.875rem;
+}

@@ -35,7 +35,9 @@ class App.AmberDesktopDefault extends App.Controller
       window.location.href = "/desktop/login?redirect=#{encodeURIComponent("/#{hash}")}"
       return
 
-    # Same target as App.DesktopBetaSwitch.navigateToDesktop, built from the cleaned hash.
-    window.location.href = if hash then "/desktop/##{hash}" else '/desktop'
+    # Same target as App.DesktopBetaSwitch.navigateToDesktop, built from the cleaned hash. With no
+    # hash, open the ticket list explicitly: in dev/test builds the desktop root is Zammad's
+    # dashboard placeholder (in production it is the ticket list).
+    window.location.href = if hash then "/desktop/##{hash}" else '/desktop/tickets/view'
 
 App.Config.set('amber_desktop_default', App.AmberDesktopDefault, 'Plugins')

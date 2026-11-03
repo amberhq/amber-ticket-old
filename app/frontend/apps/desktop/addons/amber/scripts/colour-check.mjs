@@ -59,13 +59,19 @@ const collect = (excluded) => {
   ]
   const found = []
 
-  // Let the browser normalise any colour syntax (oklab, color-mix, named) to #rrggbb or rgba().
-  const ctx = document.createElement('canvas').getContext('2d')
+  // Let the browser resolve any colour syntax (oklab, color-mix, named): paint it on a 1px canvas
+  // and read the pixel back as rgba().
+  const canvas = document.createElement('canvas')
+  canvas.width = 1
+  canvas.height = 1
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })
   const normalise = (value) => {
-    ctx.fillStyle = '#010203'
+    ctx.clearRect(0, 0, 1, 1)
     ctx.fillStyle = value
+    ctx.fillRect(0, 0, 1, 1)
+    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data
 
-    return ctx.fillStyle
+    return `rgba(${r}, ${g}, ${b}, ${Math.round((a / 255) * 100) / 100})`
   }
 
   for (const el of document.querySelectorAll('body *')) {
@@ -88,7 +94,15 @@ const collect = (excluded) => {
     }
   }
 
-  return found
+  // Report what was skipped (the outermost excluded elements), so a reader can see the exceptions.
+  const excludedRoots = [...document.querySelectorAll(excluded)].filter(
+    (el) => !el.parentElement?.closest(excluded),
+  )
+  const skipped = excludedRoots.map(
+    (el) => `${el.tagName.toLowerCase()}${el.dataset.zammadTarget ? `[${el.dataset.zammadTarget}]` : ''}`,
+  )
+
+  return { found, skipped }
 }
 
 const toToken = (value) => {
@@ -99,9 +113,7 @@ const toToken = (value) => {
 
   const [, r, g, b, a] = match
   if (a !== undefined && Number(a) === 0) return 'transparent'
-  // Two decimals, as the palette writes them (the canvas reports e.g. 0.8 as 0.8 or 0.796).
-  if (a !== undefined && Number(a) < 1)
-    return `rgba(${r}, ${g}, ${b}, ${Math.round(Number(a) * 100) / 100})`
+  if (a !== undefined && Number(a) < 1) return `rgba(${r}, ${g}, ${b}, ${Number(a)})`
 
   return `#${[r, g, b].map((n) => Number(n).toString(16).padStart(2, '0')).join('')}`
 }
@@ -117,7 +129,8 @@ const check = async (label, url) => {
   await page.waitForTimeout(1500)
 
   const bad = new Map()
-  for (const { prop, value, path } of await page.evaluate(collect, EXCLUDED)) {
+  const { found, skipped } = await page.evaluate(collect, EXCLUDED)
+  for (const { prop, value, path } of found) {
     const token = toToken(value)
     if (token === 'transparent' || allowed.has(token)) continue
     if (!bad.has(token)) bad.set(token, `${prop} on ${path}`)
@@ -125,6 +138,11 @@ const check = async (label, url) => {
 
   console.log(`${bad.size ? 'FAIL' : 'ok  '} ${label} (${url}) — ${bad.size} colour(s) outside the palette`)
   for (const [token, where] of bad) console.log(`       ${token}  ${where}`)
+  if (skipped.length) {
+    const counts = new Map()
+    for (const name of skipped) counts.set(name, (counts.get(name) ?? 0) + 1)
+    console.log(`       excluded: ${[...counts].map(([name, n]) => `${n}× ${name}`).join(', ')}`)
+  }
   if (bad.size) failures.push(label)
 }
 

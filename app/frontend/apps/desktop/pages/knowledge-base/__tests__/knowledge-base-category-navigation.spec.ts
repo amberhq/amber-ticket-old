@@ -177,7 +177,8 @@ describe('knowledge base category navigation', () => {
     expect(view.queryByRole('link', { name: 'View public knowledge base' })).not.toBeInTheDocument()
   })
 
-  it('marks the sidebar entry active while browsing a nested knowledge base route', async () => {
+  // Amber (AI-1329 FR-10, LLD OQ-L2): no Knowledge Base entry in the sidebar.
+  it.skip('marks the sidebar entry active while browsing a nested knowledge base route', async () => {
     const view = await visitView(
       `/knowledge-base/locale/en-us/category/${getIdFromGraphQLId(ROOT_CATEGORY_ID)}`,
     )

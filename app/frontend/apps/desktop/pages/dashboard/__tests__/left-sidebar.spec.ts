@@ -34,12 +34,14 @@ describe('Left sidebar', () => {
 
       const aside = view.getByRole('complementary')
 
+      // Amber (AI-1329 FR-9): the primary sidebar is a fixed 240px.
       expect(aside.parentElement).toHaveStyle({
-        '--grid-columns': '260px minmax(0, 1fr)',
+        '--grid-columns': '240px minmax(0, 1fr)',
       })
     })
 
-    it('restores stored width', async () => {
+    // Amber (AI-1329 FR-9): no drag-resize, so no stored or reset width.
+    it.skip('restores stored width', async () => {
       localStorage.setItem('primary-sidebar-width', '216')
       const view = await visitView('/')
 
@@ -72,7 +74,7 @@ describe('Left sidebar', () => {
       await view.events.click(expandButton)
 
       expect(aside.parentElement).toHaveStyle({
-        '--grid-columns': '260px minmax(0, 1fr)',
+        '--grid-columns': '240px minmax(0, 1fr)',
       })
     })
 
@@ -88,7 +90,7 @@ describe('Left sidebar', () => {
       })
     })
 
-    it('supports resizing', async () => {
+    it.skip('supports resizing', async () => {
       const view = await visitView('/')
 
       const aside = view.getByRole('complementary')
@@ -103,7 +105,7 @@ describe('Left sidebar', () => {
       })
     })
 
-    it('supports resetting', async () => {
+    it.skip('supports resetting', async () => {
       localStorage.setItem('primary-sidebar-width', '216')
 
       const view = await visitView('/')
@@ -134,7 +136,7 @@ describe('Left sidebar', () => {
         const expectedMenuItems = [
           'Admin documentation',
           'User documentation',
-          'Appearance',
+          // Amber (AI-1329 FR-7): no Appearance item, the app is light-only.
           'Playground',
           'Personal settings',
           'Sign out',
@@ -164,7 +166,8 @@ describe('Left sidebar', () => {
       },
     )
 
-    it('supports cycling appearance state', async () => {
+    // Amber (AI-1329 FR-7): no Appearance item, the app is light-only.
+    it.skip('supports cycling appearance state', async () => {
       mockPermissions(['user_preferences.appearance'])
 
       const view = await visitView('/')

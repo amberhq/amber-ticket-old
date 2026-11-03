@@ -85,6 +85,7 @@
   /* Internal notes: the warm comment frame. */
   --amber-note-bg: #fbf7ea;
   --amber-note-border: #f1e6c2;
+  --amber-note-accent: #d99a11;
 
   /* FR-3 one dot colour per ticket state type (O-013: designer to confirm). */
   --amber-dot-new: #2563eb;
@@ -144,4 +145,14 @@
   --color-red-500: #b42318;
   --color-yellow-50: #fcf3dc;
   --color-green-250: #e6f4ec;
+
+  /* Ticket state icons (CommonTicketStateIndicatorIcon) use the state dot colours (FR-3). */
+  --color-yellow-500: #dc2626; /* open */
+  --color-green-400: #16a34a; /* closed */
+  --color-red-300: #b42318; /* escalating */
+  --color-yellow-600: #7a5300; /* escalation warning */
+
+  /* Text highlighter: Zammad's yellow marker -> the design's warm note accent. */
+  --color-yellow-150: #d99a11;
+  --color-yellow-200: #fcf3dc;
 }

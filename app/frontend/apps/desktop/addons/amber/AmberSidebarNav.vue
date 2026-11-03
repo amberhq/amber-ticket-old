@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useAmberUnassignedCount } from './useAmberUnassignedCount.ts'
 
@@ -11,6 +11,11 @@ defineProps<{
 }>()
 
 const route = useRoute()
+
+// A row only renders when its page is registered (customers, or a router without that page).
+const router = useRouter()
+const hasSearch = router.hasRoute('Search')
+const hasTickets = router.hasRoute('TicketOverview')
 
 const unassigned = useAmberUnassignedCount()
 const hasUnassigned = computed(() => (unassigned.value ?? 0) > 0)
@@ -27,6 +32,7 @@ const isSearchActive = computed(() => route.name === 'Search')
 <template>
   <nav data-amber="sidebar-nav" class="flex flex-col gap-0.5" :aria-label="$t('Main navigation')">
     <RouterLink
+      v-if="hasSearch"
       v-tooltip="collapsed ? $t('Search') : undefined"
       data-amber="nav-row"
       :data-active="isSearchActive || undefined"
@@ -41,6 +47,7 @@ const isSearchActive = computed(() => route.name === 'Search')
     </RouterLink>
 
     <RouterLink
+      v-if="hasTickets"
       v-tooltip="collapsed ? $t('Tickets') : undefined"
       data-amber="nav-row"
       :data-active="isTicketsActive || undefined"

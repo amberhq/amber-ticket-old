@@ -21,6 +21,14 @@
   [data-zammad-target='MenuContainer'] {
     background-color: transparent;
   }
+
+  /*
+    No taskbar strip (AI-1329 FR-14). The addon wraps it in a hidden element rather than removing
+    it: each tab component holds its ticket's live-update subscription and its unsent reply.
+  */
+  [data-amber='taskbar'] {
+    display: none !important;
+  }
 }
 
 /* Main content area: white canvas. */

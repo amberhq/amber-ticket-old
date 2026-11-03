@@ -25,6 +25,11 @@
   }
 }
 
+/* Controls keep 6–8px corners (FR-5): large buttons are `rounded-xl` (10px) in Zammad. */
+[data-zammad-target='CommonButton'].rounded-xl {
+  border-radius: var(--radius-lg);
+}
+
 /* Submit button: Zammad yellow -> Amber ink primary. */
 :root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-yellow-300 {
   background-color: var(--amber-ink);

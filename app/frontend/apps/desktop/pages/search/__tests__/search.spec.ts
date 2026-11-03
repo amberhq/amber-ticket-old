@@ -90,7 +90,8 @@ describe('search view', () => {
       ).toBeInTheDocument()
     })
 
-    it('write quick search input correctly to the search view input', async () => {
+    // Amber (AI-1329 FR-10, FR-12): no quick search input in the sidebar.
+    it.skip('write quick search input correctly to the search view input', async () => {
       const { searchContainer, view } = await visitSearchView()
 
       const primaryNavigationSidebar = view.getByRole('complementary', {

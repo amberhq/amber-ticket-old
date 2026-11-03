@@ -130,17 +130,33 @@ export const addonWeaveRules = [
         match: { component: 'PageNavigation' },
         replace: '<AmberSidebarNav class="px-3" :collapsed="isCollapsed" />',
       },
-      { match: { component: 'UserTaskbarTabs' }, remove: true },
+      // The taskbar tabs are hidden, not removed: each tab holds its ticket's live-update
+      // subscription and unsent-reply state. `hidden` (display: none) also drops them from the
+      // keyboard tab order.
+      {
+        match: { component: 'UserTaskbarTabs' },
+        wrap: { open: '<div data-amber="taskbar" class="hidden">', close: '</div>' },
+      },
     ],
   },
 
   // Light theme only (AI-1329 FR-7): a stored dark preference is overridden in memory.
+  // No beta disclaimer (FR-17): the desktop view is the default.
   {
     target: 'apps/desktop/AppDesktop.vue',
     scriptSetup: [
       `import { useAmberForceLight } from '${ADDON}/useAmberForceLight.ts'`,
+      `import { useAmberNoBetaDisclaimer } from '${ADDON}/useAmberNoBetaDisclaimer.ts'`,
       'useAmberForceLight()',
+      'useAmberNoBetaDisclaimer()',
     ].join('\n'),
+  },
+
+  // Sidebar foot: only the avatar menu and the collapse button (AI-1329 FR-10). Zammad's "+ New
+  // ticket" menu goes; the ticket list keeps its own New ticket button.
+  {
+    target: 'apps/desktop/components/layout/LayoutSidebar/LeftSidebar/LeftSidebarFooterMenu.vue',
+    template: [{ match: { component: 'MenuContainer' }, remove: true }],
   },
 
   // No theme switch in the avatar menu (AI-1329 FR-7).
@@ -165,15 +181,6 @@ export const addonWeaveRules = [
         setAttribute: { name: ':entries', value: 'withoutAppearancePage(personalSettingItems)' },
       },
     ],
-  },
-
-  // The dev-only dashboard placeholder forwards to the ticket list (production has no dashboard).
-  {
-    target: 'apps/desktop/pages/dashboard/views/Dashboard.vue',
-    scriptSetup: [
-      "import { useRouter as __amberUseRouter } from 'vue-router'",
-      "__amberUseRouter().replace({ name: 'TicketOverview' })",
-    ].join('\n'),
   },
 
   // Ticket view: one activity tab state per ticket, shared by the header tabs and the feed.

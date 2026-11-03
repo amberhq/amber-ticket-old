@@ -88,6 +88,14 @@ describe('AI-1329 Amber shell', () => {
 
       expect(isAmberSearchShortcut(key({ metaKey: true }))).toBe(false)
     })
+
+    it('ignores the shortcut while a flyout is open, but not a hidden one', () => {
+      document.body.innerHTML = '<aside id="flyout-ticket-merge"><input></aside>'
+      expect(isAmberSearchShortcut(key({ metaKey: true }))).toBe(false)
+
+      document.body.innerHTML = '<aside id="flyout-ticket-merge" class="hidden"></aside>'
+      expect(isAmberSearchShortcut(key({ metaKey: true }))).toBe(true)
+    })
   })
 
   it('TC-26: the team header falls back to "Amber Helpdesk" when the groups query fails', async () => {
