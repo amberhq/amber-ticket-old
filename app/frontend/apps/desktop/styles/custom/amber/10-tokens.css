@@ -1,0 +1,158 @@
+/* Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/ */
+
+/*
+  Amber skin: design-token re-map.
+
+  Tailwind v4 utilities read these variables at runtime, so re-defining them here restyles
+  every component (including ones Zammad adds later) without naming any of them.
+  Values follow DESIGN.md.
+*/
+
+/* Theme-independent tokens: type, radius. Tailwind names its line-height pairs `--text-*--line-height`. */
+/* stylelint-disable custom-property-pattern */
+:root {
+  --default-font-family: 'Inter Amber', inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --default-font-feature-settings: 'cv11', 'ss01';
+  --text-sm: 0.8125rem; /* 13px UI base */
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem; /* 14px nav, inputs */
+  --text-base--line-height: 1.25rem;
+  --text-lg: 1rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --radius-md: 0.375rem; /* 6px chips */
+  --radius-lg: 0.5rem; /* 8px controls */
+  --radius-xl: 0.625rem; /* 10px popovers */
+  --radius-2xl: 0.75rem; /* 12px cards, dialogs */
+  --radius-3xl: 0.75rem;
+  --amber-text-badge: 0.6875rem; /* 11px badges */
+  --amber-text-meta: 0.75rem; /* 12px meta */
+  --amber-shadow-control: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --amber-shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --amber-shadow-dialog: 0 20px 50px rgba(0, 0, 0, 0.2);
+  --amber-backdrop: rgba(15, 15, 15, 0.28);
+  --amber-scrollbar: rgba(0, 0, 0, 0.18);
+  --amber-surface-glass: rgba(255, 255, 255, 0.8); /* Zammad's sticky compact ticket header */
+}
+
+/* stylelint-enable custom-property-pattern */
+
+/*
+  The Amber palette (AI-1329 FR-1 to FR-3). This block is the single source of truth: the colour
+  check (addons/amber/scripts/colour-check.mjs) allows exactly the colours written in this file,
+  so a colour used anywhere in the skin must be declared here first.
+*/
+:root {
+  /* FR-1 neutrals: ink, surfaces, borders. */
+  --amber-ink: #171717;
+  --amber-surface: #fff;
+  --amber-surface-muted: #f3f3f3;
+  --amber-surface-sunken: #f8f8f8;
+  --amber-border: #ededed;
+  --amber-border-strong: #d4d4d4;
+
+  /* Neutral steps between them, used by the remaps below. */
+  --amber-neutral-25: #fafafa;
+  --amber-neutral-band: #f7f7f7;
+  --amber-neutral-150: #e6e6e6;
+  --amber-neutral-175: #e2e2e2;
+  --amber-neutral-350: #c7c7c7;
+  --amber-neutral-400: #a3a3a3;
+  --amber-placeholder: #8f8f8f;
+  --amber-text-subtle: #737373;
+  --amber-text-muted: #6b6b6b;
+  --amber-text-secondary: #525252;
+  --amber-text: #404040;
+  --amber-ink-strong: #262626;
+  --amber-ink-deep: #0a0a0a;
+  --amber-black: #000;
+
+  /* FR-2 semantic pairs (background / text). */
+  --amber-danger-bg: #fdecec;
+  --amber-danger-fg: #9f1d17;
+  --amber-danger-border: #f5b5b0;
+  --amber-danger-strong: #b42318;
+  --amber-warning-bg: #fcf3dc;
+  --amber-warning-fg: #7a5300;
+  --amber-success-bg: #e6f4ec;
+  --amber-success-fg: #1e6b45;
+  --amber-purple-bg: #efebff;
+  --amber-purple-fg: #4c2db3;
+  --amber-blue-bg: #eef2fd;
+  --amber-blue-fg: #1e3a8a;
+
+  /* Internal notes: the warm comment frame. */
+  --amber-note-bg: #fbf7ea;
+  --amber-note-border: #f1e6c2;
+  --amber-note-accent: #d99a11;
+
+  /* FR-3 one dot colour per ticket state type (O-013: designer to confirm). */
+  --amber-dot-new: #2563eb;
+  --amber-dot-open: #dc2626;
+  --amber-dot-pending: #8b5cf6;
+  --amber-dot-closed: #16a34a;
+  --amber-dot-other: #a3a3a3;
+}
+
+/* Light theme: monochrome neutrals, black as the action colour. */
+:root:not([data-theme='dark']) {
+  /* Accent scale (Zammad "blue") -> neutral/ink. */
+  --color-blue-50: #fafafa;
+  --color-blue-75: #f8f8f8;
+  --color-blue-100: #f3f3f3;
+  --color-blue-200: #f3f3f3;
+  --color-blue-300: #ededed;
+  --color-blue-350: #f3f3f3;
+  --color-blue-400: #e6e6e6;
+  --color-blue-500: #e2e2e2;
+  --color-blue-600: #d4d4d4;
+  --color-blue-700: #525252;
+  --color-blue-800: #171717;
+  --color-blue-850: #000;
+  --color-blue-900: #262626;
+  --color-blue-950: #0a0a0a;
+
+  /* Surfaces and borders. */
+  --color-neutral-50: #fff;
+  --color-neutral-75: #fafafa;
+  --color-neutral-100: #ededed;
+  --color-neutral-200: #e6e6e6;
+  --color-neutral-300: #e2e2e2;
+  --color-neutral-400: #d4d4d4;
+  --color-neutral-500: #a3a3a3;
+  --color-neutral-700: #c7c7c7;
+  --color-neutral-800: #525252;
+
+  /* Text (Zammad uses the "gray"/"stone" scales for text in light mode). */
+  --color-gray-100: #404040;
+  --color-gray-200: #404040;
+  --color-gray-300: #262626;
+  --color-stone-200: #737373; /* helper text, AA on white */
+  --color-stone-400: #6b6b6b;
+  --color-stone-500: #525252;
+
+  /* Neutral fills that Zammad tinted green-grey. */
+  --color-green-100: #f3f3f3;
+  --color-green-200: #ededed;
+
+  /* Page background behind public pages (login): Zammad's near-black -> muted surface. */
+  --color-neutral-950: #f3f3f3;
+
+  /* Status pairs. Pink is Zammad's alert colour (unseen-notification count, errors). */
+  --color-pink-100: #fdecec;
+  --color-pink-500: #b42318;
+  --color-red-500: #b42318;
+  --color-yellow-50: #fcf3dc;
+  --color-green-250: #e6f4ec;
+
+  /* Ticket state icons (CommonTicketStateIndicatorIcon) use the state dot colours (FR-3). */
+  --color-yellow-500: #dc2626; /* open */
+  --color-green-400: #16a34a; /* closed */
+  --color-red-300: #b42318; /* escalating */
+  --color-yellow-600: #7a5300; /* escalation warning */
+
+  /* Text highlighter: Zammad's yellow marker -> the design's warm note accent. */
+  --color-yellow-150: #d99a11;
+  --color-yellow-200: #fcf3dc;
+}

@@ -1,0 +1,81 @@
+/* Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/ */
+
+/*
+  Amber skin: app skeleton.
+
+  The primary sidebar is the "Sidebar shell" board (AI-1329 FR-9, FR-10): light #F8F8F8, a hairline
+  on its right edge, 240px wide (set by the addon weave). The weave also drops Zammad's forced
+  `data-theme="dark"` on the sidebar, so it renders with the light tokens like the rest of the app.
+  Its rows (team header, Search, Tickets) are the addon's; their styles live in 60-addon.css.
+*/
+
+#primary-sidebar {
+  background-color: var(--amber-surface-sunken);
+  border-inline-end: 1px solid var(--amber-border);
+  color: var(--amber-text);
+
+  :focus-visible {
+    outline-color: var(--amber-ink) !important;
+  }
+
+  [data-zammad-target='MenuContainer'] {
+    background-color: transparent;
+  }
+
+  /*
+    No taskbar strip (AI-1329 FR-14). The addon wraps it in a hidden element rather than removing
+    it: each tab component holds its ticket's live-update subscription and its unsent reply.
+  */
+  [data-amber='taskbar'] {
+    display: none !important;
+  }
+}
+
+/* Main content area: white canvas. */
+:root:not([data-theme='dark']) [data-zammad-target='LayoutMain'] {
+  background-color: var(--amber-surface);
+  color: var(--amber-text);
+}
+
+/* Page header breadcrumb: muted trail, ink current page. */
+[data-zammad-target='CommonBreadcrumb'] {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+:root:not([data-theme='dark']) [data-zammad-target='CommonBreadcrumb'] {
+  color: var(--amber-text-muted);
+
+  li:last-child,
+  [aria-current] {
+    color: var(--amber-ink);
+  }
+}
+
+/* Secondary list sidebars (e.g. personal settings) on white. */
+:root:not([data-theme='dark']) [data-zammad-target='LayoutSidebar']:not(#primary-sidebar) {
+  background-color: var(--amber-surface);
+  border-color: var(--amber-border);
+}
+
+/* ------------------------------------------------ Page header bar (reference) */
+
+/*
+  Every page header row is the element that holds the breadcrumb. Give it the design's 48px bar
+  with a hairline.
+*/
+:root:not([data-theme='dark'])
+  [data-zammad-target='LayoutMain']
+  > *
+  > :has(> [data-zammad-target='CommonBreadcrumb']) {
+  min-height: 3rem;
+  border-bottom: 1px solid var(--amber-border);
+}
+
+/* Compact footer: a 32px account avatar instead of the 56px disc. */
+#primary-sidebar [data-zammad-target='AvatarMenu'] [data-zammad-target='CommonAvatar'] {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.75rem;
+}

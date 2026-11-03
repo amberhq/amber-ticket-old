@@ -1,0 +1,75 @@
+/* Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/ */
+
+/*
+  Amber skin: variant adapter.
+
+  A few Zammad semantics exist only as Tailwind utility classes (no data attribute), e.g. the
+  yellow "submit" button. This is the ONLY file that keys off utility class names — re-check it
+  after a Zammad upgrade.
+*/
+
+/*
+  Control sizes (AI-1329 FR-4, FR-5). Zammad sizes buttons with `text-xs/sm/base` utilities; every
+  labelled button becomes 14px, secondary buttons 28px tall, primary (`bg-blue-800`) and submit
+  (`bg-yellow-300`) buttons 32px. Icon-only buttons (no label span) keep their size.
+*/
+[data-zammad-target='CommonButton']:has(> span):is(.text-xs, .text-sm, .text-base) {
+  min-height: 1.75rem;
+  padding-block: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  &:is(.bg-blue-800, .bg-yellow-300) {
+    min-height: 2rem;
+    padding-block: 0.375rem;
+  }
+}
+
+/* Controls keep 6–8px corners (FR-5): large buttons are `rounded-xl` (10px) in Zammad. */
+[data-zammad-target='CommonButton'].rounded-xl {
+  border-radius: var(--radius-lg);
+}
+
+/* Submit button: Zammad yellow -> Amber ink primary. */
+:root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-yellow-300 {
+  background-color: var(--amber-ink);
+  color: var(--amber-surface);
+
+  &:hover {
+    background-color: var(--amber-black);
+  }
+}
+
+/* Primary button hover (blue-850 is already black via tokens; add depth). */
+:root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-blue-800:hover {
+  background-color: var(--amber-black);
+}
+
+/*
+  Dialog/flyout backdrop: a light veil instead of 67% black. Scoped to the backdrop's class so the
+  image viewer, which reads the same `--color-alpha-900` token, keeps its dark stage.
+*/
+:root:not([data-theme='dark']) .bg-alpha-900 {
+  background-color: var(--amber-backdrop);
+}
+
+/* Secondary (text) buttons: ghost fill on hover instead of an outline. */
+:root:not([data-theme='dark']) [data-zammad-target='CommonButton'].bg-transparent:hover {
+  background-color: var(--amber-surface-muted);
+}
+
+/*
+  Labelled secondary buttons (`bg-transparent text-blue-800` + a text label) become the
+  design's grey filled toolbar buttons; icon-only buttons stay bare.
+*/
+:root:not([data-theme='dark'])
+  [data-zammad-target='CommonButton'].bg-transparent.text-blue-800:has(> span) {
+  padding-inline: 0.75rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--amber-surface-muted);
+  color: var(--amber-ink);
+
+  &:hover {
+    background-color: var(--amber-border);
+  }
+}

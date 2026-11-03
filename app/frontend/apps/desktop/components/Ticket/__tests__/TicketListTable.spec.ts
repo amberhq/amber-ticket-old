@@ -102,7 +102,8 @@ describe('TicketListTable', () => {
     expect(wrapper.getByText('State')).toBeInTheDocument()
 
     expect(wrapper.getByText('Dummy ticket')).toBeInTheDocument()
-    expect(wrapper.getByText('Agent 1 Test')).toBeInTheDocument()
+    // Amber: the owner cell shows the system user (id 1) as "Unassigned".
+    expect(wrapper.getByText('Unassigned')).toBeInTheDocument()
     expect(wrapper.getByText('open')).toBeInTheDocument()
     expect(wrapper.getByText('3 high')).toBeInTheDocument()
   })

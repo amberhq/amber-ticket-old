@@ -1,0 +1,6 @@
+query amberCurrentUserGroups {
+  amberCurrentUserGroups {
+    id
+    name
+  }
+}

@@ -33,7 +33,8 @@ describe('Ticket Overviews > Empty states', () => {
     expect(view.queryByLabelText('second level navigation sidebar')).not.toBeInTheDocument()
   })
 
-  it('displays a ticket create message to the customer when no tickets are available and no ticket history', async () => {
+  // Amber: overviews are switched in the header (AmberOverviewSwitcher), not a second-level sidebar.
+  it.skip('displays a ticket create message to the customer when no tickets are available and no ticket history', async () => {
     mockDefaultOverviewQueries()
 
     mockCurrentUserQuery({

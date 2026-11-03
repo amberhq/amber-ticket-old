@@ -42,7 +42,8 @@ describe('LayoutPage', () => {
     localStorage.clear()
   })
 
-  it('expands search and focus quick search input', async () => {
+  // Amber (AI-1329 FR-10, FR-12): no quick search in the sidebar; Search opens the search page.
+  it.skip('expands search and focus quick search input', async () => {
     const wrapper = renderComponent(LayoutPage, {
       router: true,
       form: true,

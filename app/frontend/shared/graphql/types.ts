@@ -6,6 +6,11 @@ import type * as Types from './schema-types';
 
 export * from './schema-types'
 export type { Exact }
+export type AmberCurrentUserGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AmberCurrentUserGroupsQuery = { amberCurrentUserGroups: Array<{ __typename: 'Group', id: string, name: string | null | undefined }> };
+
 export type BetaUiSendFeedbackMutationVariables = Exact<{
   input: Types.BetaUiFeedbackInput;
 }>;
